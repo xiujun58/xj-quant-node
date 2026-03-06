@@ -33,6 +33,34 @@ function parseMessage(text) {
   return { tsCode, tradeDate };
 }
 
+
+function isAllowedSender(message) {
+  const from = message.from || {};
+  const allowId = config.telegramAllowedBotId;
+  const allowUsername = (config.telegramAllowedBotUsername || '').replace('@', '').toLowerCase();
+
+  if (!allowId && !allowUsername) {
+    return true;
+  }
+
+  if (!from.is_bot) {
+    return false;
+  }
+
+  if (allowId && String(from.id) !== String(allowId)) {
+    return false;
+  }
+
+  if (allowUsername) {
+    const senderUsername = String(from.username || '').toLowerCase();
+    if (senderUsername !== allowUsername) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 function parseArgs() {
   const args = process.argv.slice(2);
   const payload = { mode: 'cli', tsCode: '', tradeDate: '' };
@@ -63,6 +91,11 @@ async function runCli({ tsCode, tradeDate }, services) {
 
 async function runBot(services) {
   const telegram = new TelegramService(config.telegramBotToken);
+
+  if (!config.telegramAllowedBotId && !config.telegramAllowedBotUsername) {
+    throw new Error('bot模式要求设置 TELEGRAM_ALLOWED_BOT_ID 或 TELEGRAM_ALLOWED_BOT_USERNAME');
+  }
+
   let offset = 0;
 
   process.stdout.write('[BOT] Telegram机器人已启动，等待消息...\n');
@@ -78,6 +111,10 @@ async function runBot(services) {
 
         const chatId = message.chat.id;
         const msgId = message.message_id;
+
+        if (!isAllowedSender(message)) {
+          continue;
+        }
 
         try {
           const { tsCode, tradeDate } = parseMessage(message.text);

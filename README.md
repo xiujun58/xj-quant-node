@@ -22,6 +22,7 @@ cp .env.example .env
 - `TUSHARE_TOKEN`
 - `DEEPSEEK_API_KEY`
 - `TELEGRAM_BOT_TOKEN`（机器人模式必填）
+- `TELEGRAM_ALLOWED_BOT_ID` 或 `TELEGRAM_ALLOWED_BOT_USERNAME`（至少配置一个，用于限定仅接收指定机器人）
 - 可选：`DEEPSEEK_BASE_URL`、`DEEPSEEK_MODEL`
 
 ## 方式1：CLI运行
@@ -46,10 +47,11 @@ npm run start:bot
 - 股票代码 + 日期：`000001.SZ 20250221`
 
 机器人行为：
-1. 收到消息后先回复“正在分析”。
-2. 自动拉取 Tushare 数据并调用 DeepSeek。
-3. 将最终 JSON 决策结果回发到 Telegram 聊天。
-4. 若错误（如代码格式或接口失败）会回发错误信息。
+1. 仅处理来自指定机器人（ID/用户名白名单）的消息，其余消息直接忽略。
+2. 收到消息后先回复“正在分析”。
+3. 自动拉取 Tushare 数据并调用 DeepSeek。
+4. 将最终 JSON 决策结果回发到 Telegram 聊天。
+5. 若错误（如代码格式或接口失败）会回发错误信息。
 
 ## 输出与错误
 

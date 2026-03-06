@@ -15,5 +15,7 @@ module.exports = {
   deepseekApiKey: getEnv('DEEPSEEK_API_KEY'),
   deepseekBaseUrl: process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com',
   deepseekModel: process.env.DEEPSEEK_MODEL || 'deepseek-chat',
-  telegramBotToken: getEnv('TELEGRAM_BOT_TOKEN', false)
+  telegramBotToken: getEnv('TELEGRAM_BOT_TOKEN', false),
+  telegramAllowedBotId: process.env.TELEGRAM_ALLOWED_BOT_ID,
+  telegramAllowedBotUsername: process.env.TELEGRAM_ALLOWED_BOT_USERNAME
 };
