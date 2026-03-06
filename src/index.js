@@ -142,10 +142,10 @@ async function main() {
     model: config.deepseekModel
   });
 
-  if (args.mode === 'bot') {
+  // if (args.mode === 'bot') {
     await runBot({ tushare, deepseek });
     return;
-  }
+  // }
 
   await runCli(args, { tushare, deepseek });
 }
