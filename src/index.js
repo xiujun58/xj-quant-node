@@ -163,12 +163,12 @@ async function main () {
         model: config.deepseekModel
     });
 
-    if (args.mode === 'bot') {
-        await runBot({ tushare, deepseek });
-        return;
-    }
+    // if (args.mode === 'bot') {
+    await runBot({ tushare, deepseek });
+    return;
+    // }
 
-    await runCli(args, { tushare, deepseek });
+    // await runCli(args, { tushare, deepseek });
 }
 
 main().catch((err) => {
